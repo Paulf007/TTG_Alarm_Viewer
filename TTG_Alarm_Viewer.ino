@@ -35,6 +35,7 @@ bool      initialConfig = false;
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 /////////////////////Define Solar Data/////////////////////////////////////////////
+int solarData[]= {0,0,0,0,0} // inv , soc , grid , bat , sol
 int inv = 0 ;
 int soc = 0 ;
 int grid = 0 ;
@@ -70,8 +71,8 @@ unsigned long drawTime = 0;
 
 
 // Replace with your network credentials
-const char* ssid     = "PlaasGeluk";
-const char* password = "PlaasGeluk11";
+const char* ssid     = "mySSID";
+const char* password = "myPassWord";
 const char* mqtt_server = "192.168.8.30";
 long lastReconnectAttempt = 0;
 // Buttons
@@ -83,26 +84,30 @@ WiFiUDP ntpUDP;
 //NTPClient timeClient(ntpUDP);
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 7200, 60000);
 unsigned long startSec;
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+char daysOfTheWeek[7][12] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 char monthsOfYear[12][12] = {"Jan", "Feb", "Mar", "Apr","May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 unsigned long clockTimer;
 byte clockActive = 0;
 byte alarmActive = 0;
 
+/////////////////////  Track Switches for Menue in array /////////////////////////////////////////////
+byte energyAuto = 1 ,scrAuto = 1,  playTone = 1 , energyM = 1, alarmS = 1   ;
+byte linkSwitches[]= {energyAuto,scrAuto, playTone, energyM, alarmS};
 
 ////////////////////////Screen Timer Out /////////////////////////////////////////
 //  unsigned long currentMillis = millis(); // refresh counter variable
 unsigned long startMillis;
 byte snd = 0;
-byte scrAuto = 1;
+
 int timer = 60;
 unsigned long startSecMillis;
 
 
 /////////////////////////Screen Rotation///////////////////////////////////////
-byte screenR = 1 ;
-byte alarmS = 1;
+//byte screenR = 1 ;
+//byte alarmS = 1;
 /////////////////////////Menu ///////////////////////////////////////
+const char* menueItems[] = {"Energy TimeOut", "Screen TimeOut", "Audio", "Show Energy","Alarm", "Flip Screen"};
 byte MenueDisplay = 0;    // Activate Menue
 byte menueSelect = 0;
 ////////////////////////////////////////////////////////////////
@@ -111,7 +116,7 @@ Button2 buttonB = Button2(BUTTON_B_PIN);
 
 
 /////////////////////////TONE SETUP ///////////////////////////////////////
-byte playTone = 1 ;
+//byte playTone = 1 ;
 byte tn = 0 ; // On or OFf
 byte runT = 0;
 byte count = 0 ;
@@ -120,8 +125,8 @@ int buzz = 0 ;
 byte lp = 0 ;
 unsigned long toneTmer ;
 /////////////////////Screen Menu///////////////////////////////////////////
-int energyM = 1 ;
-byte energyAuto = 1 ; // Turn Screen off Auto 
+//int energyM = 1 ;
+//byte energyAuto = 1 ; // Turn Screen off Auto 
 
 //int cheer_red = 0;
 //int cheer_green = 0;
@@ -215,11 +220,11 @@ void setup() {
   buttonB.setDoubleClickHandler(handler);
   buttonA.setTripleClickHandler(handler);
   buttonB.setTripleClickHandler(handler);
-  energyM = 1;
-  scrAuto = 0;
-  alarmS = 1 ;
+  linkSwitches[3] = 1;
+  linkSwitches[1] = 0;
+  linkSwitches[5] = 1 ;
   menueSelect = 0;
-  energyAuto = 1;
+  linkSwitches[0] = 1;
   if (TFT_BL > 0) {
     pinMode(TFT_BL, OUTPUT);
     digitalWrite(TFT_BL, HIGH);

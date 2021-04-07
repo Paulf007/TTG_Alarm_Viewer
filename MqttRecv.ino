@@ -21,7 +21,7 @@ if  (MenueDisplay != 1){
     tft.setTextColor(getValue(strData, ',', 0).toInt(), getValue(strData, ',', 1).toInt());
   }    
 
-if (alarmS == 1){
+if (linkSwitches[5] == 1){
   if (topicStr.endsWith("drawstringl")) {
     digitalWrite(TFT_BL, HIGH);
       if (clockActive == 1){
@@ -29,10 +29,10 @@ if (alarmS == 1){
       startScrn ();
     }
     alarmActive = 1 ;
-    energyM = 0;
+    linkSwitches[3] = 0;
     //Serial.println("Energy Auto:");
     //Serial.println(energyAuto);
-    if (energyAuto == 1) {    // Switch screen off after 120 sec or keep screen on with Last trigger
+    if (linkSwitches[0] == 1) {    // Switch screen off after 120 sec or keep screen on with Last trigger
       //Serial.print("Start Timer:");
       //Serial.println(energyM);
       displayBanner ();
@@ -80,7 +80,7 @@ if (alarmS == 1){
  
   } 
 }
-if (energyM == 1 ){
+if (linkSwitches[3] == 1 ){
   clockTimer = millis();
   if (clockActive == 1){
     clockActive = 0;

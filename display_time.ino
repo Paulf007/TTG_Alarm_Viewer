@@ -14,9 +14,9 @@ String timeStamp;
   printScreen (formattedDate,15,50,4);
   printScreen (daysOfTheWeek[timeClient.getDay()],15,90,2);
   //printScreen (getTimeStampString(2),120,90,2);
-  printScreen (getTimeStampString(3),100,90,2);
+  printScreen (getTimeStampString(3),75,90,2);
   int month = getTimeStampString(2).toInt()-1;
-  printScreen (monthsOfYear[month],130,90,2);
+  printScreen (monthsOfYear[month],100,90,2);
   printScreen (getTimeStampString(1),175,90,2);
   
  }

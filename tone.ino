@@ -1,7 +1,7 @@
 void startTone(int cnt , unsigned long tmr ){
   //Serial.print ("Play:");
-  //Serial.println(playTone);
- if (playTone == 1){
+  //Serial.println(linkSwitches[3]);
+ if (linkSwitches[2] == 1){
   //  Serial.print ("Run Tone:"); 
   //Serial.println (cnt); 
         startMTone = millis();

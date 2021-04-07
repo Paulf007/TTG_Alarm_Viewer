@@ -82,12 +82,12 @@ void printOnOff (byte i,int x,int y,int f){
 }
 
 void screenOff(){
-  if (scrAuto == 1 ){
+  if (linkSwitches[1] == 1 ){
     //tft.fillScreen(TFT_BLACK);
     MenueDisplay = 0;
     digitalWrite(TFT_BL, LOW);
     snd = 0;
-    energyM = 1;
+    linkSwitches[4] = 1;
     alarmActive = 0;
     timer = 60;
   }
@@ -108,13 +108,13 @@ void startScrn (){
   tft.setTextColor(TFT_YELLOW, TFT_BLACK);
   printScreen ("Audio",105,1,1);
   tft.setTextColor(TFT_RED, TFT_BLACK);
-  printOnOff (playTone,145,1,1);
-  //printScreen (String(playTone),140,1,1);
+  printOnOff (linkSwitches[2],145,1,1);
+  //printScreen (String(linkSwitches[3]),140,1,1);
 
   tft.setTextColor(TFT_YELLOW, TFT_BLACK);
   printScreen ("Energy ",170,1,1);
   tft.setTextColor(TFT_RED, TFT_BLACK);
-  printOnOff (energyM,215,1,1);
+  printOnOff (linkSwitches[3],215,1,1);
   //printScreen (String(energyM),215,1,1);
   tft.setTextColor(TFT_YELLOW, TFT_BLACK);
   //

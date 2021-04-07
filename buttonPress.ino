@@ -38,8 +38,8 @@ void changed(Button2& btn) {
   }else{
    
    startTone(1 , 150);
-   if (energyM == 0){
-    energyM = 1;
+   if (linkSwitches[4] == 0){
+    linkSwitches[4] = 1;
     startScrn ();
    }else  if (solPos < 5){
       solPos++;
@@ -107,11 +107,11 @@ void handler(Button2& btn) {
                
             //  }
             }else if (btn == buttonB){
-           //   if (playTone == 1){
-           //     playTone = 0 ;
+           //   if (linkSwitches[3] == 1){
+           //     linkSwitches[3] = 0 ;
           //      printScreen ("Audio OFF",100,1,1);
          //     }else{
-         //      playTone = 1 ;
+         //      linkSwitches[3] = 1 ;
          //      printScreen ("Audio On",100,1,1);
          //     }
               //
