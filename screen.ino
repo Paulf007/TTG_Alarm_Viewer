@@ -1,7 +1,7 @@
+
+
+
 void displayInverter (){
-//  int soc = 0 ;
-//int grid = 0 ;
-//int bat = 0 ;
      tft.setFreeFont(FSB24);
      tft.setTextSize(NULL);
      char invS  [15]="";
@@ -9,11 +9,11 @@ void displayInverter (){
      char solS  [15]="";
      char gridS [15]="";
      char batS  [15]="";
-     sprintf(invS ,"%s%d%s","Inv:",inv,"w");  
-     sprintf(socS,"%s%d%s","Soc:",soc,"%");
-     sprintf(solS,"%s%d%s","Sol:",sol,"w");    
-     sprintf(gridS ,"%s%d%s","Grd:",grid,"w");
-     sprintf(batS,"%s%d%s","Bat:",bat,"w");
+     sprintf(invS ,"%s%d%s","Inv:",solarData[0],"w");  
+     sprintf(socS,"%s%d%s","Soc:",solarData[1],"%");
+     sprintf(solS,"%s%d%s","Sol:",solarData[2],"w");
+     sprintf(gridS ,"%s%d%s","Grd:",solarData[3],"w");
+     sprintf(batS,"%s%d%s","Bat:",solarData[4],"w");
      //solPos = 1
      switch (solPos) {
        case 1 :
@@ -81,15 +81,24 @@ void printOnOff (byte i,int x,int y,int f){
 
 }
 
+void screenOn(){
+        digitalWrite(TFT_BL, HIGH);
+        
+        screenStatus = 1 ;
+        startScrn ();               // Setup Screen
+        startTime();
+}
+
 void screenOff(){
   if (linkSwitches[1] == 1 ){
-    //tft.fillScreen(TFT_BLACK);
+    alarmActive = 0 ;
+    screenStatus = 0;
     MenueDisplay = 0;
     digitalWrite(TFT_BL, LOW);
     snd = 0;
-    linkSwitches[4] = 1;
+    linkSwitches[4] = 0;
     alarmActive = 0;
-    timer = 60;
+   
   }
 
 }
@@ -101,14 +110,14 @@ void startScrn (){
   tft.setTextColor(TFT_YELLOW, TFT_BLACK); // Note: the new fonts do not draw the background colour
   tft.fillScreen(TFT_BLACK);
 
-  printScreen ("Screen Off",0,1,1);
+  printScreen ("Alarm",0,1,1);
   tft.setTextColor(TFT_RED, TFT_BLACK);
-  printScreen (String(timer),70,1,1);
+  printOnOff  (linkSwitches[0],40,1,1);
 
   tft.setTextColor(TFT_YELLOW, TFT_BLACK);
-  printScreen ("Audio",105,1,1);
+  printScreen ("Audio",85,1,1);
   tft.setTextColor(TFT_RED, TFT_BLACK);
-  printOnOff (linkSwitches[2],145,1,1);
+  printOnOff (linkSwitches[2],125,1,1);
   //printScreen (String(linkSwitches[3]),140,1,1);
 
   tft.setTextColor(TFT_YELLOW, TFT_BLACK);

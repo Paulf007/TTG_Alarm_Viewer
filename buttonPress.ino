@@ -8,11 +8,10 @@ void changed(Button2& btn) {
                 startTone(1 , 100);
                 menueSelect++ ;
                 startTime();
-                 //printScreen (String(menueSelect),200,115,2);
-                 loopMenue (menueSelect);
+                loopMenue (menueSelect);
               if (menueSelect > 5){             // Loop Back to Top
                 menueSelect = 0;
-                 //printScreen (String(menueSelect),200,115,2);
+
                  loopMenue (menueSelect);
               }
               
@@ -25,8 +24,11 @@ void changed(Button2& btn) {
       
       if (scr == 1){
         digitalWrite(TFT_BL, LOW);
+        screenStatus = 0 ;
       }else{
         digitalWrite(TFT_BL, HIGH);
+        linkSwitches[3] = 1;       // Activate Energy Screen even if it was off
+        screenStatus = 1 ;
         startTime();
         
       }
@@ -69,13 +71,7 @@ void longClickDetected(Button2& btn) {
       }
             
             }else if (btn == buttonB) {
-             // if (energyAuto == 1){
-             //   energyAuto = 0 ;
-             //   printScreen ("Energy On ",170,1,1); 
-             // }else{
-             //   energyAuto = 1 ;
-             //     printScreen ("Energy On*",170,1,1);   
-              //}
+
              
      }
 }
@@ -93,28 +89,9 @@ void handler(Button2& btn) {
             break;
         case DOUBLE_CLICK:
             if (btn == buttonA) {
-            //  if (scrAuto == 0){
-            //    scrAuto = 1;
-            //    startTime();
-            //    printScreen ("Screen Auto On ",0,1,1);
-               // tft.setCursor(0, 1, 1); 
-                //tft.print("Screen Auto On ");
-           //   }else{
-           //     scrAuto = 0;
-           //     printScreen ("Screen Auto Off",0,1,1);
-                //tft.setCursor(0, 1, 1); 
-                //tft.print("Screen Auto Off");
-               
-            //  }
+
             }else if (btn == buttonB){
-           //   if (linkSwitches[3] == 1){
-           //     linkSwitches[3] = 0 ;
-          //      printScreen ("Audio OFF",100,1,1);
-         //     }else{
-         //      linkSwitches[3] = 1 ;
-         //      printScreen ("Audio On",100,1,1);
-         //     }
-              //
+
             }
         
          //   Serial.print("double ");
@@ -123,31 +100,14 @@ void handler(Button2& btn) {
         Serial.print("triple ");
         // Setup Screen Rotate
          if (btn == buttonB) {
-       //   Serial.println("triple B");
-       //   byte scrR = EEPROM.read(0);
-       //   if (scrR > 3){
-      //      tft.setRotation(3);
-       //     EEPROM.write(0, 3);
-       //     EEPROM.commit();
-      //      ESP.restart();
-      //    }else if (scrR == 3){
-      //      tft.setRotation(1);
-     //       EEPROM.write(0, 1);
-      //      EEPROM.commit(); 
-     //       ESP.restart();
-     //     }else if (scrR == 1){
-      //      tft.setRotation(3);
-     //       EEPROM.write(0, 3);
-      //      EEPROM.commit(); 
-      //      ESP.restart();
-      //    }
+ 
           
          }
             Serial.print("triple ");
-            //tft.fillScreen(TFT_BLACK);
+
             break;
         case LONG_CLICK:
-         //   Serial.println(btn);
+
 
 
             

@@ -22,7 +22,14 @@ String timeStamp;
  }
 }
 
-
+void displayAlarmTimeOut (){
+  if (alarmActive == 1){
+    AlarmTimeOut-- ;
+     char timeOt  [5]="";
+     sprintf(timeOt,"%d%s",AlarmTimeOut,"s"); 
+    printScreen (timeOt,160,110,2);
+  }
+}
 
 String getTimeStampString(byte cmd ) {        // 1) Year , 2) Month 3) Day 
    time_t rawtime = timeClient.getEpochTime();

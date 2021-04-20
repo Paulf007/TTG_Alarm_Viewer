@@ -35,10 +35,10 @@ bool      initialConfig = false;
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 /////////////////////Define Solar Data/////////////////////////////////////////////
-int solarData[]= {0,0,0,0,0} // inv , soc , grid , bat , sol
-int inv = 0 ;
-int soc = 0 ;
-int grid = 0 ;
+int solarData[]= {0,0,0,0,0} ; // inv , soc , grid , bat , sol
+int inv = 0 ; // 0
+int soc = 0 ; // 1
+int grid = 0 ; // 2
 int bat = 0 ;
 int sol = 0 ;
 byte solPos = 1 ;
@@ -91,25 +91,40 @@ byte clockActive = 0;
 byte alarmActive = 0;
 
 /////////////////////  Track Switches for Menue in array /////////////////////////////////////////////
-byte energyAuto = 1 ,scrAuto = 1,  playTone = 1 , energyM = 1, alarmS = 1   ;
-byte linkSwitches[]= {energyAuto,scrAuto, playTone, energyM, alarmS};
+byte linkSwitches[]= {1,1, 1, 1, 1};
+/* linkSwitches[0]= Alarm
+ * linkSwitches[1]= ScreenOff Auto
+ * linkSwitches[2]= Sound ON/OFF
+ * linkSwitches[3]= Show Energy
+ * linkSwitches[4]= Clock
+ */
+ byte AlarmTimeOut = 60 ; // To display the timeout 
+/////////////////////////Menu ///////////////////////////////////////
+//                                0                   1            2          3           4           5
+const char* menueItems[] = {"Alarm", "Screen TimeOut", "Audio", "Show Energy","Alarm", "Flip Screen"};
+byte MenueDisplay = 0;    // Activate Menue
+byte menueSelect = 0;
+byte screenStatus = 1 ;
 
-////////////////////////Screen Timer Out /////////////////////////////////////////
+ 
+////////////////////////  Timers  /////////////////////////////////////////
 //  unsigned long currentMillis = millis(); // refresh counter variable
 unsigned long startMillis;
+unsigned long startSecMillis;
+
+byte SolarTrigger = 15 ;  // Timer to show solar info every x time
+
+
 byte snd = 0;
 
 int timer = 60;
-unsigned long startSecMillis;
+
 
 
 /////////////////////////Screen Rotation///////////////////////////////////////
 //byte screenR = 1 ;
 //byte alarmS = 1;
-/////////////////////////Menu ///////////////////////////////////////
-const char* menueItems[] = {"Energy TimeOut", "Screen TimeOut", "Audio", "Show Energy","Alarm", "Flip Screen"};
-byte MenueDisplay = 0;    // Activate Menue
-byte menueSelect = 0;
+
 ////////////////////////////////////////////////////////////////
 Button2 buttonA = Button2(BUTTON_A_PIN);
 Button2 buttonB = Button2(BUTTON_B_PIN);
@@ -206,6 +221,7 @@ void setup() {
   tn = 0;
   runT = 0 ;
   solPos = 1 ;
+  screenStatus = 1;
   //ledcWriteTone(0,400);
   //delay (200);
   //ledcWriteTone(0,0);
@@ -220,8 +236,9 @@ void setup() {
   buttonB.setDoubleClickHandler(handler);
   buttonA.setTripleClickHandler(handler);
   buttonB.setTripleClickHandler(handler);
-  linkSwitches[3] = 1;
+  
   linkSwitches[1] = 0;
+  linkSwitches[3] = 1;
   linkSwitches[5] = 1 ;
   menueSelect = 0;
   linkSwitches[0] = 1;
@@ -283,7 +300,7 @@ void loop() {
   buttonB.loop();
   timeOutT();
   runTone ();
-  displayTimeOut ();
+  //displayTimeOut ();
   SecTimer ();
   ShowClock ();
 //  displayMenue();

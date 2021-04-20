@@ -21,27 +21,26 @@ if  (MenueDisplay != 1){
     tft.setTextColor(getValue(strData, ',', 0).toInt(), getValue(strData, ',', 1).toInt());
   }    
 
-if (linkSwitches[5] == 1){
-  if (topicStr.endsWith("drawstringl")) {
+if (linkSwitches[0] == 1){
+
+  if (topicStr.endsWith("drawstringl")) { // Alarm Recieved and overides all
     digitalWrite(TFT_BL, HIGH);
-      if (clockActive == 1){
+      if (clockActive == 1){              // Check if the Clock is Showing
       tft.fillScreen(TFT_BLACK);
-      startScrn ();
+      clockActive = 0 ;                   // Disable Clock until timeOut
+      startScrn ();                       // Show top Banner
     }
-    alarmActive = 1 ;
-    linkSwitches[3] = 0;
-    //Serial.println("Energy Auto:");
-    //Serial.println(energyAuto);
-    if (linkSwitches[0] == 1) {    // Switch screen off after 120 sec or keep screen on with Last trigger
-      //Serial.print("Start Timer:");
-      //Serial.println(energyM);
-      displayBanner ();
-      //scrAuto = 1 ;
-      startMillis = millis();
-      startSecMillis = millis();
-      }else{
-        startTime();
-      }
+    clockTimer = millis();                // Reset Clock Banner
+    alarmActive = 1 ;                     // Set Alarm Active so that no other data is displayed 
+    if (linkSwitches[1] == 0){
+     AlarmTimeOut = 90; 
+    }else{
+     AlarmTimeOut = 60; 
+    }
+    
+    linkSwitches[3] = 0;                  // Disable Show Energy - MQTT Payloads is ignored
+    startTime();                          // Start Timer to go back to inverter screen
+
  
     textString = getValue(strData, ',', 0);
     textXPos = getValue(strData, ',', 1).toInt();  
@@ -80,8 +79,11 @@ if (linkSwitches[5] == 1){
  
   } 
 }
-if (linkSwitches[3] == 1 ){
-  clockTimer = millis();
+
+
+
+if (linkSwitches[3] == 1 ){          // Check if Solar Menue is Active 
+  clockTimer = millis();            // Restart Clock Timer
   if (clockActive == 1){
     clockActive = 0;
     tft.fillScreen(TFT_BLACK);
@@ -90,84 +92,34 @@ if (linkSwitches[3] == 1 ){
   char sensor[20]="";   
     if (topicStr.endsWith("Inverter_Watts_W")) {
 
-     //tft.drawString("               ",20,30,GFXFF);
-     //tft.drawString("Use ",20,30,GFXFF);
-     //char sensor[10]="";
-     inv = strData.toInt();
-     //Serial.print("Int");
-     //Serial.println(inv);
+     solarData[0] = strData.toInt();    // set Inverter Data
      displayInverter ();
-     //sprintf(sensor,"%s%s%s","Inv:",strData.c_str()," w");
-     //tft.drawString("                                ",1,30,GFXFF); 
-     //tft.drawString(sensor,1,30,GFXFF);
-     //tft.unloadFont();
+
   } 
 //int soc = 0 ;
 //int grid = 0 ;
 //int bat = 0 ;
   if (topicStr.endsWith("Battery_Soc_%")) {
-    soc = strData.toInt();
+    solarData[1] = strData.toInt();
 
   }
    if (topicStr.endsWith("Solar_Watts_W")) {
-    sol = strData.toInt();
+    solarData[2]= strData.toInt();
 
   }
  
 
    if (topicStr.endsWith("Grid_Watts_W")) {
-    grid = strData.toInt();
+    solarData[3] = strData.toInt();
  
   }
 
    if (topicStr.endsWith("Battery_Watts_W")) {
-    bat = strData.toInt();
+    solarData[4] = strData.toInt();
 
    }
 
  
- }
- /*
- else if (energyAuto == 1) {
-  char sensor[20]="";   
-    if (topicStr.endsWith("Inverter_Watts_W")) {
-     tft.setFreeFont(FSB24);
-     tft.setTextSize(NULL);
-     //tft.drawString("               ",20,30,GFXFF);
-     //tft.drawString("Use ",20,30,GFXFF);
-     //char sensor[10]="";
-     sprintf(sensor,"%s%s%s","Inv:",strData.c_str()," w");
-     tft.drawString("                                ",1,30,GFXFF); 
-     tft.drawString(sensor,1,30,GFXFF);
-     //tft.unloadFont();
+   }
   } 
-
-  if (topicStr.endsWith("Battery_Soc_%")) {
-    //char sensor[10]="";
-    textString = getValue(strData, '.', 0);
-    sprintf(sensor,"%s%s%s","Soc:",textString.c_str(),"%");
-    printScreen (sensor,1,80,2); 
-  }
-   if (topicStr.endsWith("Solar_Watts_W")) {
-    //char sensor[10]="";
-    sprintf(sensor,"%s%s%s","Sol:",strData.c_str(),"w");
-    printScreen (sensor,120,80,2); 
-  }
- 
-
-   if (topicStr.endsWith("Grid_Watts_W")) {
-    //char sensor[10]="";
-    sprintf(sensor,"%s%s%s","Grd:",strData.c_str(),"w");
-    printScreen (sensor,1,110,2); 
-  }
-
-   if (topicStr.endsWith("Battery_Watts_W")) {
-    //char sensor[10]="";
-    sprintf(sensor,"%s%s%s","Bat:",strData.c_str(),"w");
-    printScreen (sensor,120,110,2);
-   }
- 
-    }
-    */
-  } // end of block on Menue
  } // end callback
